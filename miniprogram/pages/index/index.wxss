@@ -150,10 +150,7 @@
   font-weight: 500;
 }
 
-.test-count {
-  font-size: 22rpx;
-  color: #999999;
-}
+
 
 .test-arrow {
   margin-left: 20rpx;

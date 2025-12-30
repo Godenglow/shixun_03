@@ -4,7 +4,7 @@ Page({
     testInfo: {},
     questions: [],
     currentQuestionIndex: 0,
-    totalQuestions: 0,
+
     currentQuestion: null,
     selectedAnswer: '',
     answers: [],
@@ -63,12 +63,13 @@ Page({
       const db = wx.cloud.database()
       const questions = db.collection('questions')
       
-      // 获取测试的题目
+      // 获取测试的所有题目，确保能获取20道题
       const res = await questions
         .where({
           testId: this.data.testId
         })
         .orderBy('order', 'asc')
+        .limit(50)  // 设置足够大的limit来获取所有题目
         .get()
       
       if (res.data.length === 0) {
@@ -77,7 +78,6 @@ Page({
       
       this.setData({
         questions: res.data,
-        totalQuestions: res.data.length,
         currentQuestion: res.data[0],
         loading: false
       })
@@ -128,7 +128,7 @@ Page({
       return
     }
     
-    const isLastQuestion = this.data.currentQuestionIndex === this.data.totalQuestions - 1
+    const isLastQuestion = this.data.currentQuestionIndex === this.data.questions.length - 1
     
     if (isLastQuestion) {
       this.showConfirm()
@@ -145,7 +145,7 @@ Page({
 
   showConfirm() {
     // 检查是否所有题目都已回答
-    const allAnswered = this.data.answers.length === this.data.totalQuestions && 
+    const allAnswered = this.data.answers.length === this.data.questions.length && 
                        this.data.answers.every(answer => answer !== '' && answer !== undefined)
     
     if (allAnswered) {
@@ -220,7 +220,7 @@ Page({
   },
 
   updateProgress() {
-    const progress = Math.round(((this.data.currentQuestionIndex + 1) / this.data.totalQuestions) * 100)
+    const progress = Math.round(((this.data.currentQuestionIndex + 1) / this.data.questions.length) * 100)
     this.setData({ progress })
   },
 

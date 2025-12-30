@@ -1,5 +1,5 @@
-// 云数据库初始化云函数
-// 部署此函数后，在小程序中调用一次即可完成初始化
+// 极简版云数据库初始化云函数 - 仅添加题目数据
+// 专门解决题目显示问题，避免超时
 
 const cloud = require('wx-server-sdk')
 cloud.init({
@@ -10,90 +10,10 @@ const db = cloud.database()
 
 exports.main = async (event, context) => {
   try {
-    console.log('开始初始化数据库...')
+    console.log('🚀 开始极简初始化 - 仅添加题目数据')
     
-    // 1. 创建用户集合（如果不存在）
-    try {
-      await db.createCollection('users')
-      console.log('✅ 创建 users 集合成功')
-    } catch (err) {
-      console.log('users 集合已存在或创建失败:', err.message)
-    }
-
-    // 2. 创建测试集合
-    try {
-      await db.createCollection('tests')
-      console.log('✅ 创建 tests 集合成功')
-    } catch (err) {
-      console.log('tests 集合已存在或创建失败:', err.message)
-    }
-
-    // 3. 创建题目集合
-    try {
-      await db.createCollection('questions')
-      console.log('✅ 创建 questions 集合成功')
-    } catch (err) {
-      console.log('questions 集合已存在或创建失败:', err.message)
-    }
-
-    // 4. 创建测试记录集合
-    try {
-      await db.createCollection('records')
-      console.log('✅ 创建 records 集合成功')
-    } catch (err) {
-      console.log('records 集合已存在或创建失败:', err.message)
-    }
-
-    // 数据库索引设置
-    const indexes = {
-      users: [
-        { name: 'openid_index', fields: ['openid'], unique: true }
-      ],
-      tests: [
-        { name: 'type_index', fields: ['type'] },
-        { name: 'status_index', fields: ['status'] }
-      ],
-      questions: [
-        { name: 'testId_index', fields: ['testId'] },
-        { name: 'order_index', fields: ['testId', 'order'] }
-      ],
-      records: [
-        { name: 'testId_index', fields: ['testId'] },
-        { name: 'openid_index', fields: ['_openid'] },
-        { name: 'createTime_index', fields: ['createTime'] }
-      ]
-    }
-
-    // 5. 添加示例测试数据
-    const sampleTests = [
-      {
-        _id: 'test_personality_001',
-        title: '性格类型测试',
-        description: '通过一系列问题了解你的性格类型，帮助你更好地认识自己',
-        type: 'personality',
-        typeName: '性格测试',
-        coverImage: '',
-        questionCount: 20,
-        maxScore: 100,
-        createTime: new Date(),
-        status: 'active'
-      },
-      {
-        _id: 'test_anxiety_001',
-        title: '焦虑水平测试',
-        description: '评估你当前的焦虑水平，了解自己的情绪状态',
-        type: 'anxiety',
-        typeName: '焦虑测试',
-        coverImage: '',
-        questionCount: 20,
-        maxScore: 80,
-        createTime: new Date(),
-        status: 'active'
-      }
-    ]
-
-    // 6. 添加示例题目数据
-    const sampleQuestions = [
+    // 20道性格测试题目
+    const personalityQuestions = [
       {
         _id: 'question_personality_001',
         testId: 'test_personality_001',
@@ -353,7 +273,11 @@ exports.main = async (event, context) => {
           { id: 'D', text: '有些担忧，感到不安', score: 3 }
         ],
         createTime: new Date()
-      },
+      }
+    ]
+
+    // 20道焦虑测试题目
+    const anxietyQuestions = [
       {
         _id: 'question_anxiety_001',
         testId: 'test_anxiety_001',
@@ -556,9 +480,9 @@ exports.main = async (event, context) => {
         question: '你是否经常感到疲劳，即使休息充足？',
         options: [
           { id: 'A', text: '经常感到疲劳', score: 9 },
-          { id: 'B', text: '偶尔感到疲劳', score: 6 },
+          { id: 'B', text: '偶尔会感到疲劳', score: 6 },
           { id: 'C', text: '很少感到疲劳', score: 3 },
-          { id: 'D', text: '精力充沛', score: 1 }
+          { id: 'D', text: '精力充沛，很少疲劳', score: 1 }
         ],
         createTime: new Date()
       },
@@ -566,12 +490,12 @@ exports.main = async (event, context) => {
         _id: 'question_anxiety_017',
         testId: 'test_anxiety_001',
         order: 17,
-        question: '在人多或嘈杂的环境中，你是否感到不适？',
+        question: '对于日程安排的变化，你的反应是：',
         options: [
-          { id: 'A', text: '经常感到非常不适', score: 10 },
-          { id: 'B', text: '偶尔会感到不适', score: 6 },
-          { id: 'C', text: '基本能够适应', score: 3 },
-          { id: 'D', text: '没有任何不适', score: 1 }
+          { id: 'A', text: '感到非常焦虑和不安', score: 10 },
+          { id: 'B', text: '有些紧张，需要时间适应', score: 6 },
+          { id: 'C', text: '能够灵活调整', score: 3 },
+          { id: 'D', text: '很喜欢变化，感觉新鲜', score: 1 }
         ],
         createTime: new Date()
       },
@@ -579,12 +503,12 @@ exports.main = async (event, context) => {
         _id: 'question_anxiety_018',
         testId: 'test_anxiety_001',
         order: 18,
-        question: '你是否经常因为焦虑而影响食欲？',
+        question: '你是否经常感到肩膀或颈部紧张？',
         options: [
-          { id: 'A', text: '经常因为焦虑吃不下或暴饮暴食', score: 10 },
-          { id: 'B', text: '偶尔会这样', score: 6 },
-          { id: 'C', text: '很少影响食欲', score: 3 },
-          { id: 'D', text: '焦虑从不影响我的食欲', score: 1 }
+          { id: 'A', text: '经常感到紧张和疼痛', score: 9 },
+          { id: 'B', text: '偶尔会紧张', score: 6 },
+          { id: 'C', text: '很少有这种感觉', score: 3 },
+          { id: 'D', text: '身体很少感到紧张', score: 1 }
         ],
         createTime: new Date()
       },
@@ -592,12 +516,12 @@ exports.main = async (event, context) => {
         _id: 'question_anxiety_019',
         testId: 'test_anxiety_001',
         order: 19,
-        question: '你是否经常需要寻求他人的安慰或保证？',
+        question: '对于他人对你的期望，你感到：',
         options: [
-          { id: 'A', text: '经常需要他人的安慰', score: 9 },
-          { id: 'B', text: '偶尔会需要', score: 6 },
-          { id: 'C', text: '很少需要', score: 3 },
-          { id: 'D', text: '几乎不需要', score: 1 }
+          { id: 'A', text: '压力很大，担心无法达到', score: 10 },
+          { id: 'B', text: '有些压力，会努力达到', score: 6 },
+          { id: 'C', text: '能够理性看待期望', score: 3 },
+          { id: 'D', text: '觉得是动力，享受挑战', score: 1 }
         ],
         createTime: new Date()
       },
@@ -605,52 +529,58 @@ exports.main = async (event, context) => {
         _id: 'question_anxiety_020',
         testId: 'test_anxiety_001',
         order: 20,
-        question: '总体而言，你对生活的满意度如何？',
+        question: '在晚上，你是否经常因为担心而难以入睡？',
         options: [
-          { id: 'A', text: '经常感到不满意和焦虑', score: 10 },
-          { id: 'B', text: '偶尔感到不满意', score: 6 },
-          { id: 'C', text: '基本满意', score: 3 },
-          { id: 'D', text: '非常满意，生活很美好', score: 1 }
+          { id: 'A', text: '经常这样，无法入睡', score: 10 },
+          { id: 'B', text: '偶尔会这样', score: 6 },
+          { id: 'C', text: '很少这样', score: 3 },
+          { id: 'D', text: '从来没有这个问题', score: 1 }
         ],
         createTime: new Date()
       }
     ]
 
-    // 添加测试数据
-    for (const test of sampleTests) {
-      try {
-        await db.collection('tests').add({ data: test })
-        console.log(`✅ 添加测试数据: ${test.title}`)
-      } catch (err) {
-        console.log(`测试数据已存在: ${test.title}`)
-      }
-    }
+    // 合并所有题目
+    const allQuestions = [...personalityQuestions, ...anxietyQuestions]
 
-    // 添加题目数据
-    for (const question of sampleQuestions) {
-      try {
-        await db.collection('questions').add({ data: question })
-        console.log(`✅ 添加题目数据: ${question.question}`)
-      } catch (err) {
-        console.log(`题目数据已存在: ${question.question}`)
-      }
-    }
+    console.log(`📝 准备添加 ${allQuestions.length} 道题目...`)
+
+    // 批量添加题目数据（使用set方法覆盖现有文档）
+            let successCount = 0
+            let errorCount = 0
+            
+            for (const question of allQuestions) {
+              try {
+                await db.collection('questions').doc(question._id).set({
+                  data: question
+                })
+                successCount++
+                console.log(`✅ 添加/更新题目: ${question.order}. ${question.question.substring(0, 20)}...`)
+              } catch (err) {
+                errorCount++
+                console.log(`❌ 添加/更新题目失败: ${question.question}`, err.message)
+              }
+            }
+            
+            console.log(`📊 处理完成: 成功 ${successCount}, 失败 ${errorCount}`)
+
+    console.log('🎉 极简初始化完成！')
 
     return {
       success: true,
-      message: '数据库初始化完成！',
-      collections: ['users', 'tests', 'questions', 'records'],
-      dataAdded: {
-        tests: sampleTests.length,
-        questions: sampleQuestions.length
+      message: '极简初始化完成！',
+      questionsAdded: allQuestions.length,
+      details: {
+        personality: personalityQuestions.length,
+        anxiety: anxietyQuestions.length
       }
     }
 
   } catch (error) {
-    console.error('数据库初始化失败:', error)
+    console.error('❌ 初始化失败:', error)
     return {
       success: false,
-      message: '数据库初始化失败',
+      message: '初始化失败',
       error: error.message
     }
   }

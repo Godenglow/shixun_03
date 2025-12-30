@@ -38,7 +38,6 @@
           <text class="test-description">{{item.description}}</text>
           <view class="test-meta">
             <text class="test-type">{{item.typeName}}</text>
-            <text class="test-count">{{item.questionCount || 0}}题</text>
           </view>
         </view>
         <view class="test-arrow">

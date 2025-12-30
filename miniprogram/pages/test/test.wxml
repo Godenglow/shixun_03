@@ -4,7 +4,7 @@
     <view class="progress-bar">
       <view class="progress-fill" style="width: {{progress}}%"></view>
     </view>
-    <text class="progress-text">{{currentQuestionIndex + 1}} / {{totalQuestions}}</text>
+    <text class="progress-text">{{currentQuestionIndex + 1}} / {{questions.length}}</text>
   </view>
 
   <!-- 题目内容 -->

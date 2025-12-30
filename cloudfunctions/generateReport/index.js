@@ -94,15 +94,16 @@ function generatePersonalityReport(score, test) {
   let description = ''
   let advice = ''
   
-  if (score >= 80) {
+  // 20道题，每题10分，最高200分
+  if (score >= 160) {
     level = '外向型'
     description = '你是一个性格外向的人，喜欢与人交往，充满活力。'
     advice = '继续保持你的社交活力，但也要注意给自己一些独处的时间。'
-  } else if (score >= 60) {
+  } else if (score >= 120) {
     level = '中间偏外向'
     description = '你的性格比较均衡，既有外向的一面，也有内向的一面。'
     advice = '你的适应能力很强，可以在不同场合下调整自己的状态。'
-  } else if (score >= 40) {
+  } else if (score >= 80) {
     level = '中间偏内向'
     description = '你倾向于内向，喜欢安静的环境，但不排斥社交。'
     advice = '适当参与一些社交活动，有助于拓展人际关系。'
@@ -117,7 +118,7 @@ function generatePersonalityReport(score, test) {
     description: description,
     advice: advice,
     score: score,
-    maxScore: 100
+    maxScore: 200
   }
 }
 
@@ -127,15 +128,16 @@ function generateAnxietyReport(score, test) {
   let description = ''
   let advice = ''
   
-  if (score >= 70) {
+  // 20道题，每题10分，最高200分
+  if (score >= 140) {
     level = '重度焦虑'
     description = '你的焦虑水平较高，可能会影响到日常生活。'
     advice = '建议寻求专业心理咨询师的帮助，学习一些放松技巧。'
-  } else if (score >= 50) {
+  } else if (score >= 100) {
     level = '中度焦虑'
     description = '你有一定程度的焦虑，需要注意情绪管理。'
     advice = '可以尝试一些放松训练，如深呼吸、冥想等。'
-  } else if (score >= 30) {
+  } else if (score >= 60) {
     level = '轻度焦虑'
     description = '你的焦虑水平在轻度范围内，属于正常反应。'
     advice = '保持良好的生活习惯，适当运动有助于缓解焦虑。'
@@ -150,7 +152,7 @@ function generateAnxietyReport(score, test) {
     description: description,
     advice: advice,
     score: score,
-    maxScore: 100
+    maxScore: 200
   }
 }
 
