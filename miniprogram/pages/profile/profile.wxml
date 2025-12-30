@@ -1,0 +1,82 @@
+<view class="container">
+  <!-- 用户信息卡片 -->
+  <view class="user-card">
+    <view class="user-info">
+      <image class="avatar" src="{{userInfo.avatarUrl || '/images/default-avatar.png'}}" mode="aspectFill"></image>
+      <view class="user-details">
+        <text class="nickname">{{userInfo.nickName || '未登录'}}</text>
+        <text class="join-date" wx:if="{{userInfo.createTime}}">加入于 {{userInfo.createTime}}</text>
+      </view>
+    </view>
+    <view class="user-stats" wx:if="{{userInfo.nickName}}">
+      <view class="stat-item">
+        <text class="stat-number">{{totalTests}}</text>
+        <text class="stat-label">完成测试</text>
+      </view>
+      <view class="stat-item">
+        <text class="stat-number">{{totalRecords}}</text>
+        <text class="stat-label">测试记录</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 未登录状态 -->
+  <view class="login-prompt" wx:if="{{!userInfo.nickName}}">
+    <text class="prompt-text">登录后查看您的测试记录</text>
+    <button class="login-btn" bindtap="goLogin">立即登录</button>
+  </view>
+
+  <!-- 测试记录列表 -->
+  <view class="records-section" wx:if="{{userInfo.nickName}}">
+    <view class="section-header">
+      <text class="section-title">测试记录</text>
+      <text class="section-count">{{records.length}} 条记录</text>
+    </view>
+
+    <view class="loading" wx:if="{{loading}}">
+      <text>加载记录中...</text>
+    </view>
+
+    <view class="error" wx:if="{{error}}">
+      <text>{{error}}</text>
+      <button class="retry-btn" bindtap="loadRecords">重试</button>
+    </view>
+
+    <view class="records-list" wx:if="{{!loading && !error}}">
+      <view 
+        class="record-item" 
+        wx:for="{{records}}" 
+        wx:key="_id"
+        bindtap="viewRecord"
+        data-record-id="{{item._id}}"
+      >
+        <view class="record-info">
+          <text class="test-title">{{item.testTitle}}</text>
+          <view class="record-meta">
+            <text class="record-date">{{item.createTime}}</text>
+            <text class="record-score">{{item.result.level}}</text>
+          </view>
+        </view>
+        <view class="record-score-badge">
+          <text class="score-text">{{item.totalScore}}</text>
+        </view>
+        <view class="record-arrow">
+          <text class="arrow-icon">></text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 空状态 -->
+    <view class="empty" wx:if="{{!loading && !error && records.length === 0}}">
+      <image class="empty-icon" src="/images/empty-record.png" mode="aspectFit"></image>
+      <text class="empty-text">还没有测试记录</text>
+      <text class="empty-desc">去完成第一个测试吧</text>
+      <button class="go-test-btn" bindtap="goHome">开始测试</button>
+    </view>
+
+    <!-- 加载更多 -->
+    <view class="load-more" wx:if="{{hasMore && records.length > 0}}">
+      <text class="load-text" bindtap="loadMore">加载更多</text>
+    </view>
+  </view>
+</view>

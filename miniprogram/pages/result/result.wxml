@@ -1,0 +1,88 @@
+<view class="container">
+  <view class="header">
+    <view class="celebration">
+      <text class="icon">🎉</text>
+      <text class="title">测试完成</text>
+    </view>
+    <text class="subtitle">以下是您的测试结果</text>
+  </view>
+
+  <view class="loading" wx:if="{{loading}}">
+    <text>加载结果中...</text>
+  </view>
+
+  <view class="error" wx:if="{{error}}">
+    <text>{{error}}</text>
+    <button class="retry-btn" bindtap="loadResult">重试</button>
+  </view>
+
+  <view class="result-content" wx:if="{{!loading && !error && result}}">
+    <!-- 测试信息卡片 -->
+    <view class="info-card">
+      <view class="test-info">
+        <text class="test-title">{{result.testTitle}}</text>
+        <text class="test-date">{{result.createTime}}</text>
+      </view>
+    </view>
+
+    <!-- 得分卡片 -->
+    <view class="score-card">
+      <view class="score-circle">
+        <text class="score-number">{{result.result.score}}</text>
+        <text class="score-total">/ {{result.result.maxScore}}</text>
+      </view>
+      <text class="score-level">{{result.result.level}}</text>
+    </view>
+
+    <!-- 结果描述 -->
+    <view class="description-card">
+      <text class="card-title">结果分析</text>
+      <text class="description-text">{{result.result.description}}</text>
+    </view>
+
+    <!-- 建议卡片 -->
+    <view class="advice-card">
+      <text class="card-title">建议</text>
+      <text class="advice-text">{{result.result.advice}}</text>
+    </view>
+
+    <!-- 操作按钮 -->
+    <view class="action-buttons">
+      <button class="action-btn primary" bindtap="shareResult">
+        <text class="btn-text">分享结果</text>
+      </button>
+      
+      <view class="secondary-actions">
+        <button class="action-btn secondary" bindtap="goHome">
+          <text class="btn-text">返回首页</text>
+        </button>
+        
+        <button class="action-btn secondary" bindtap="goProfile">
+          <text class="btn-text">查看记录</text>
+        </button>
+      </view>
+    </view>
+  </view>
+
+  <!-- 分享弹窗 -->
+  <view class="share-modal" wx:if="{{showShare}}" bindtap="hideShare">
+    <view class="share-content" catchtap="">
+      <view class="share-header">
+        <text class="share-title">分享测试结果</text>
+        <text class="close-btn" bindtap="hideShare">×</text>
+      </view>
+      
+      <view class="share-body">
+        <button class="share-btn" open-type="share">
+          <text class="share-icon">📤</text>
+          <text class="share-text">转发给朋友</text>
+        </button>
+        
+        <button class="share-btn" bindtap="saveImage">
+          <text class="share-icon">📸</text>
+          <text class="share-text">保存图片</text>
+        </button>
+      </view>
+    </view>
+  </view>
+</view>

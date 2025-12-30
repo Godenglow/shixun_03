@@ -1,0 +1,20 @@
+<view class="login-container">
+  <view class="login-header">
+    <image class="logo" src="/images/logo.png" mode="aspectFit"></image>
+    <text class="title">心理测试</text>
+    <text class="subtitle">了解真实的自己</text>
+  </view>
+  
+  <view class="login-form">
+    <button class="login-btn" type="primary" bindtap="handleLogin">
+      <text class="btn-text">微信授权登录</text>
+    </button>
+    
+    <text class="agreement">
+      登录即表示同意
+      <text class="link" bindtap="showAgreement">《用户协议》</text>
+      和
+      <text class="link" bindtap="showPrivacy">《隐私政策》</text>
+    </text>
+  </view>
+</view>

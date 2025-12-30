@@ -1,0 +1,57 @@
+<view class="container">
+  <!-- 顶部欢迎信息 -->
+  <view class="header">
+    <view class="welcome-info">
+      <text class="greeting">你好，{{userInfo.nickName || '用户'}}</text>
+      <text class="subtitle">选择一项测试开始探索自己</text>
+    </view>
+    <image class="avatar" src="{{userInfo.avatarUrl || '/images/default-avatar.png'}}" mode="aspectFill"></image>
+  </view>
+
+  <!-- 测试列表 -->
+  <view class="test-section">
+    <view class="section-title">
+      <text class="title">心理测试</text>
+      <text class="subtitle">专业的心理测试帮助你了解自己</text>
+    </view>
+
+    <view class="loading" wx:if="{{loading}}">
+      <text>加载中...</text>
+    </view>
+
+    <view class="error" wx:if="{{error}}">
+      <text>{{error}}</text>
+      <button class="retry-btn" bindtap="loadTests">重试</button>
+    </view>
+
+    <view class="test-list" wx:if="{{!loading && !error}}">
+      <view 
+        class="test-item" 
+        wx:for="{{tests}}" 
+        wx:key="_id"
+        bindtap="startTest"
+        data-test-id="{{item._id}}"
+      >
+        <image class="test-cover" src="{{item.coverImage || '/images/default-test.png'}}" mode="aspectFill"></image>
+        <view class="test-info">
+          <text class="test-title">{{item.title}}</text>
+          <text class="test-description">{{item.description}}</text>
+          <view class="test-meta">
+            <text class="test-type">{{item.typeName}}</text>
+            <text class="test-count">{{item.questionCount || 0}}题</text>
+          </view>
+        </view>
+        <view class="test-arrow">
+          <text class="arrow-icon">></text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 空状态 -->
+    <view class="empty" wx:if="{{!loading && !error && tests.length === 0}}">
+      <image class="empty-icon" src="/images/empty.png" mode="aspectFit"></image>
+      <text class="empty-text">暂无可用的测试</text>
+      <text class="empty-desc">请稍后再试</text>
+    </view>
+  </view>
+</view>
